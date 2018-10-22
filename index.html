@@ -1,0 +1,53 @@
+<!-- index.html -->
+<html>
+<head>
+    <title>camera</title>
+    <style>
+    body {
+        margin: 0;
+        background: #000;
+    }
+    #video {
+        display: block;
+        width: 100%;
+    }
+    </style>
+</head>
+<body>
+    <video id="video" autoplay playsinline></video>
+    <input id="btnPicture" type="button" disabled="true" value="Take Picture"></input>
+    <img id="image_png" src="#">
+	<canvas id="imageCanvas" style="display:none;" width="300" height="300"></canvas>
+
+    <script>
+    const medias = {audio : false, video : {
+        facingMode : {
+          exact : "environment" // リアカメラにアクセス
+        }
+    }},
+    video  = document.getElementById("video");
+
+    navigator.getUserMedia(medias, successCallback, errorCallback);
+
+    function successCallback(stream) {
+        video.srcObject = stream;
+
+        var button = document.getElementById("btnPicture");
+    	var canvas = document.getElementById("imageCanvas");
+
+        button.disabled = false;
+		button.onclick = function() {
+			canvas.getContext("2d").drawImage(video, 0, 0, 300, 300, 0, 0, 300, 300);
+			var img = canvas.toDataURL("image/png");
+            document.getElementById("image_png").src = img;
+            //console.log(img);
+			//alert("done");
+		};
+    };
+
+    function errorCallback(err) {
+        alert(err);
+    };
+    </script>
+</body>
+</html>
